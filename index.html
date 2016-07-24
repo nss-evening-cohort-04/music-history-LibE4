@@ -4,10 +4,100 @@
 <head>
   <meta charset="utf-8">
   <title>Music History</title>
+  <link rel="stylesheet" type="text/css" href="bl-music.css">
 </head>
 
 <body>
+<div class="container">
+	<!-- top navigation bar -->
+	<header class="flex-item">
+				<ul class="nav-item">
+					<li>View Music</li>
+					<li><a href="#">Add Music</a></li>
+					<li><a href="#">Profile</a></li>
+				</ul>
+	</header>
 
+	<div class="flex-item flex2">
+		<!-- side control bar -->
+		<div class="wrapper">
+				<p>
+					<label for="song-length">Song length:</label><br>
+					<input in="song-length" type="range">
+				</p>
 
+				<p>
+					<label for="artist">Artist:</label><br>
+					<select name="artist">
+						<option value="celine-dion">Celine Dion</option>
+						<option value="shania-twin">Shania Twain</option>
+						<option value="richard-marx">Richard Marx</option>
+						<option value="machael-jackson">Michael Jackson</option>
+						<option value="bette-midler">Bette Midler</option>
+					</select>
+				</p>
+				
+				<p>
+					<label for="album">Album</label><br>
+					<select name="album">
+						<option value="celined-1">Color of My Love</option>
+						<option value="shaniat-1">Come On Over</option>
+						<option value="Richardm-1">Richar Marx</option>
+						<option value="micalej-1">Bad</option>
+						<option value="bettem-1">Some People's Lives</option>
+					</select>
+				</p>
+
+				<p>Genre:<br>
+					<label><input type="checkbox" name="genre" value="rock">Rock</label>
+					<label><input type="checkbox" name="genre" value="classical">Classical</label><br>
+					<label><input type="checkbox" name="genre" value="pop">Pop</label>
+					<label><input type="checkbox" name="genre" value="jazz">Jazz</label><br>
+					<label><input type="checkbox" name="genre" value="blues">Blues</label>
+					<label><input type="checkbox" name="genre" value="hip-hop">Hip hop</label>
+				</p>
+				<p><input type="button" name="filter" value="Filter"></p>
+
+		</div>
+
+		<!-- content -->
+		<div class="content">
+			<section class="songs">
+				<h4>The Power of Love</h4>
+				<ul class="content-item">
+					<li>Celine Dion</li>
+					<li>Color of My Love</li>
+					<li>Pop</li>
+				</ul>
+			</section>
+			<section class="songs">
+				<h4>Misled</h4>
+				<ul class="content-item">
+					<li>Celine Dion</li>
+					<li>Color of My Love</li>
+					<li>Pop</li>
+				</ul>
+			</section>
+			<section class="songs">
+				<h4>Think Twice</h4>
+				<ul class="content-item">
+					<li>Celine Dion</li>
+					<li>Color of My Love</li>
+					<li>Pop</li>
+				</ul>
+			</section>
+			<section class="songs">
+				<h4>Only One Road</h4>
+				<ul class="content-item">
+					<li>Celine Dion</li>
+					<li>Color of My Love</li>
+					<li>Pop</li>
+				</ul>
+			</section>
+
+					
+		</div>
+	</div>
+</div>
 </body>
 </html>

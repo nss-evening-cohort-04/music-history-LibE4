@@ -1,0 +1,113 @@
+/* container layout */
+.container {
+	width: 80%;
+	margin: 1em auto 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.flex-item {
+	margin-bottom: 1em;
+	width: 100%;
+}
+
+.flex2 {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+/* container styles */
+header {
+	height: 3em;
+	border: 1.5px solid black;
+	background-color: #FFB4B0;
+}
+
+
+.wrapper {
+	border: 1.5px solid black;
+	width: 15%;
+	background-color: #4DD7FA;
+	text-align: left;
+}
+
+.content {
+	border: 1.5px solid black;
+	width: 80.5%;
+	background-color: #FEFAC0;
+	color: #785616;
+}
+
+ul {
+	list-style-type: none;
+}
+
+/* navigaion bar styles*/
+.nav-item {
+	margin: auto;
+}
+
+.nav-item:before {
+	content: "";
+	display: inline-block;
+	vertical-align: middle;
+	height: 3em;
+}
+
+.nav-item li {
+	display: inline-block;
+	padding-right: 3px;
+	font-size: large;
+}
+
+.nav-item li:not(:last-child) { 
+    border-right: 2px solid black;
+}
+
+/* sidebar styles */
+.wrapper {
+	padding-left: 20px;
+	padding-right: 5px;
+	font-size: large;
+}
+
+label {
+	font-size: large;
+
+}
+
+input[type="button"] {
+	display: block;
+	margin-left: 25%;
+	font-size: large;
+}
+
+
+/* content styles */
+.songs {
+	width: 90%;
+	margin: auto;
+}
+
+h4 {
+	font-size: x-large;
+	margin-bottom: 20px;
+}
+
+.content-item {
+	width: 100%;
+	padding-left: 0;
+}
+
+.content-item li {
+	display: inline-block;
+	margin-right: 10px;
+	padding-right: 15px;
+	font-size: large;
+
+}
+
+.content-item li:not(:last-child) { 
+    border-right: 2px solid black;
+}
