@@ -32,7 +32,7 @@ header {
 	text-align: left;
 }
 
-.content {
+#content {
 	border: 1.5px solid black;
 	width: 80.5%;
 	background-color: #FEFAC0;
