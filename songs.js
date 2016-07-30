@@ -20,7 +20,7 @@ for (var i = 0; i < songs.length; i++) {
 	var charCode = 0, songsEdit = "";
 	for (var j = 0; j < songs[i].length; j++) {
 		charCode = songs[i].charCodeAt(j);
-		if ((65 <= charCode && charCode <=90) || (97 <= charCode && charCode <= 122) || (charCode == 45) || (charCode == 32)) {
+		if ((65 <= charCode && charCode <=90) || (97 <= charCode && charCode <= 122) || (charCode == 45) || (charCode == 32)|| (charCode == 38)) {
 			songsEdit += songs[i].charAt(j);
 		}
 	}
