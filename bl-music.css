@@ -1,6 +1,6 @@
 /* container layout */
 .container {
-	width: 80%;
+	width: 90%;
 	margin: 1em auto 0;
 	display: flex;
 	flex-direction: column;
@@ -27,14 +27,14 @@ header {
 
 .wrapper {
 	border: 1.5px solid black;
-	width: 15%;
+	width: 20%;
 	background-color: #4DD7FA;
 	text-align: left;
 }
 
 #content {
 	border: 1.5px solid black;
-	width: 80.5%;
+	width: 75.5%;
 	background-color: #FEFAC0;
 	color: #785616;
 }
@@ -111,3 +111,25 @@ h4 {
 .content-item li:not(:last-child) { 
     border-right: 2px solid black;
 }
+
+.hidden {
+	display: none;
+}
+
+.show {
+	display: ruby-base;
+}
+
+/* addsong style*/
+.addsong {
+	text-align: center;
+	background-color: lightblue;
+}
+
+.addsong label,
+.addsong button {
+	display: block;
+	margin: 1em auto;
+	font-size: large;
+}
+
