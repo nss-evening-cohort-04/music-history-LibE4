@@ -1,17 +1,15 @@
 /* container layout */
-.container {
-	width: 90%;
-	margin: 1em auto 0;
-	display: flex;
-	flex-direction: column;
+body {
+	margin: 0;
 }
 
-.flex-item {
-	margin-bottom: 1em;
-	width: 100%;
+.container {
+	width: 90%;
+	margin: 0 auto;
 }
 
 .flex2 {
+	margin-top: 4em;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -19,9 +17,13 @@
 
 /* container styles */
 header {
+	width: 90%;
 	height: 3em;
 	border: 1.5px solid black;
 	background-color: #FFB4B0;
+	box-sizing: border-box;
+	position: fixed;
+  top: 0;
 }
 
 
@@ -37,6 +39,8 @@ header {
 	width: 75.5%;
 	background-color: #FEFAC0;
 	color: #785616;
+	padding: 0 5%;
+	box-sizing: border-box;
 }
 
 ul {
@@ -74,7 +78,6 @@ ul {
 
 label {
 	font-size: large;
-
 }
 
 input[type="button"] {
@@ -86,8 +89,20 @@ input[type="button"] {
 
 /* content styles */
 .songs {
-	width: 90%;
-	margin: auto;
+	display: block;
+	padding: 0 1em;
+}
+
+.songs:nth-of-type(2n) {
+	background-color: SeaShell;
+}
+
+.songs:nth-of-type(2n+1) {	
+	background-color: MintCream;
+}
+
+.songs:first-of-type {
+	font-weight: bold;
 }
 
 h4 {
@@ -105,7 +120,6 @@ h4 {
 	margin-right: 10px;
 	padding-right: 15px;
 	font-size: large;
-
 }
 
 .content-item li:not(:last-child) { 
@@ -135,4 +149,9 @@ h4 {
 
 button {
 	background-color: tomato;
+}
+
+#btnMore {
+	float: right;
+	margin: 1em 0;
 }

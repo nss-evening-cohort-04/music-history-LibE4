@@ -90,6 +90,7 @@ songRequest.addEventListener("load", getSongFromJSON); //Callback
 songRequest.open("GET", "songs.json")
 songRequest.send();
 var btnMore = document.createElement("button");
+btnMore.id = "btnMore";
 btnMore.innerHTML = "More>";
 btnMore.addEventListener("click", function(){
 	// load song from json2 file
