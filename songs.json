@@ -1,0 +1,29 @@
+{
+	"songs": [
+		{
+		"name":"The Power of Love",
+		"artist":"Celine Dion",
+		"album":"Color of My Love"
+		},
+		{
+			"name":"Misled",
+			"artist":"Celine Dion",
+			 "album":"Color of My Love"
+		},
+		{
+			"name":"Think Twice",
+			"artist":"Celine Dion",
+			 "album":"Color of My Love"
+		},
+		{
+			"name":"Only One Road",
+			"artist":"Celine Dion",
+			 "album":"Color of My Love"
+		},
+		{
+			"name":"From This Moment On",
+			"artist":"Shania Twain",
+			 "album":"Come On Over"
+		}
+	]
+}
