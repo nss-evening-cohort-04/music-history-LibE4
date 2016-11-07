@@ -4,30 +4,38 @@
 <head>
   <meta charset="utf-8">
   <title>Music History</title>
-  <link rel="stylesheet" type="text/css" href="bl-music.css">
+  <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <link rel="stylesheet" type="text/css" href="./styles/main.css">
 </head>
 
 <body>
 	<div class="container">
 		<!-- top navigation bar -->
-		<header class="flex-item">
-					<ul class="nav-item" id="nav-item">
-						<li>View Music</li>
-						<li><a href="#">List Music</a></li>
-						<li><a href="#">Add Music</a></li>
-						<li><a href="#">Profile</a></li>
-					</ul>
-		</header>
+		<div class="row">
+		  <div class="col-md-12">
+				<header>
+							<ul class="nav-item" id="nav-item">
+								<li>View Music</li>
+								<li><a href="#">List Music</a></li>
+								<li><a href="#">Add Music</a></li>
+								<li><a href="#">Profile</a></li>
+							</ul>
+				</header>
+			</div>
+		</div>
 
-		<div class="flex-item flex2 show">
+		<div class="row main-top">
 			<!-- side control bar -->
-			<div class="wrapper show" id="filter">
-					<p>
+		  <div class="col-md-4">
+				<div class="show wrapper" id="filter">
+					<div>
 						<label for="song-length">Song length:</label><br>
 						<input in="song-length" type="range">
-					</p>
+					</div>
 
-					<p>
+					<div>
 						<label for="artist">Artist:</label><br>
 						<select id="artist" name="artist">
 							<option value="">--select--</option>
@@ -37,9 +45,9 @@
 							<option value="machael-jackson">Michael Jackson</option>
 							<option value="bette-midler">Bette Midler</option>
 						</select>
-					</p>
+					</div>
 					
-					<p>
+					<div>
 						<label for="album">Album</label><br>
 						<select id="album" name="album">
 							<option value="">--select--</option>
@@ -49,33 +57,39 @@
 							<option value="micalej-1">Bad</option>
 							<option value="bettem-1">Some People's Lives</option>
 						</select>
-					</p>
+					</div>
 
-					<p>Genre:<br>
+					<div>Genre:<br>
 						<label><input type="checkbox" name="genre" value="rock">Rock</label>
 						<label><input type="checkbox" name="genre" value="classical">Classical</label><br>
 						<label><input type="checkbox" name="genre" value="pop">Pop</label>
 						<label><input type="checkbox" name="genre" value="jazz">Jazz</label><br>
 						<label><input type="checkbox" name="genre" value="blues">Blues</label>
 						<label><input type="checkbox" name="genre" value="hip-hop">Hip hop</label>
-					</p>
-					<p><input type="button" name="filter" value="Filter"></p>
-
+					</div>
+					<div><input type="button" name="filter" value="Filter"></div>
+				</div>
 			</div>
-
 			<!-- content -->
-			<div class="show" id="content">
-						
+		  <div class="col-md-8">
+				<div class="show" id="content">
+							
+				</div>
 			</div>
 		</div>
-		<div id="add-music-view" class="addsong hidden">
-			<label>Song Name: <input type="text" id="add-name" value=""></label>
-			<label>Artist: <input type="text" id="add-artist" value=""></label>
-			<label>Album: <input type="text" id="add-album" value=""></label>
-			<button id="addsong">Add</button>
+		<div class="row">
+		  <div class="col-md-12">
+				<div id="add-music-view" class="addsong hidden">
+					<label>Song Name: <input type="text" id="add-name" value=""></label>
+					<label>Artist: <input type="text" id="add-artist" value=""></label>
+					<label>Album: <input type="text" id="add-album" value=""></label>
+					<button id="addsong">Add</button>
+				</div>
+			</div>			
 		</div>
 	</div>
 	<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
 	<script src="dist/bundle.js" type="text/javascript" charset="utf-8" async defer></script>
 </body>
 </html>
+
