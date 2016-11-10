@@ -15,11 +15,10 @@ function addSongToDOM(songs) {
 					<li>${Song.artist}</li>
 					<li>${Song.album}</li>
 				</ul>
-				<button id='btnDelete'>Delete</button>
+				<button class='btnDelete' data-fbid="${Song.id}">Delete</button>
 			</section>`
 		);
 	}
-  $($contentElement).append("<button id='btnMore'>More\></button>");
 } // end function addSongToDOM
 
 module.exports = addSongToDOM;
@@ -27,33 +26,41 @@ module.exports = addSongToDOM;
 },{}],2:[function(require,module,exports){
 
 "use strict";
-let getSongs = require("./songs.js").getSongs;
+let loadJsonFB = require("./songs.js").loadJsonFB;
 let addSongToDOM = require("./DOM.js");
 
 let $artist = $("#artist");
 let $album = $("#album");
 
-function filterSongs(type, choice){
-	let songs = getSongs();
-	let filteredSongs = [];
-	songs.forEach((Song)=>{
-		if(Song[type] === choice){
-			filteredSongs.push(Song);
-		}
-	});
-	addSongToDOM(filteredSongs);
-
+function filterSongs(apiKeys, type, choice){
+  loadJsonFB(apiKeys).then(function(dataPass){
+		let filteredSongs = [];
+		dataPass.forEach((Song)=>{
+			if(Song[type] === choice){
+				filteredSongs.push(Song);
+			}
+		});
+		addSongToDOM(filteredSongs);
+  });
 }
 
 module.exports = filterSongs;
 
 },{"./DOM.js":1,"./songs.js":5}],3:[function(require,module,exports){
 "use strict";
+
+let firebaseCredentials = require("./songs.js").firebaseCredentials;
 let addSong = require("./songs.js").addSong;
+let deleteSong = require("./songs.js").deleteSong;
 let loadSongs = require("./songs.js").loadSongs;
 let showSongList = require("./showView.js").showSongList;
 let showSongForm = require("./showView.js").showSongForm;
 let filterSongs = require("./filter.js");
+
+let apiKeys = {};
+let uid = "";
+let artist = "";
+let album = "";
 
 $(document).ready(function(){
 
@@ -66,18 +73,22 @@ $(document).ready(function(){
 	let $liEmt = $($navEmt).children("li");
 	let $artist = $("#artist");
 	let $album = $("#album");
+	let $filterBtn = $("#filterBtn");
 
-	// load song from json file
-	loadSongs("songs.json");
+	firebaseCredentials().then(function(keys){
+		console.log("keys", keys);
+		apiKeys = keys;
+		firebase.initializeApp(apiKeys);
+		
+		// load song from firebase
+		loadSongs(apiKeys);
+	});
+
 
 	// load song from json2 file
-	$contentElement.click(function(e){
-		if (e.target.id === "btnMore"){
-			loadSongs("songs2.json");
-		}
-		if (e.target.id === "btnDelete"){
-			$(e.target).parent().remove();
-		}
+	$contentElement.on("click", ".btnDelete", function(e){
+		let itemId = $(this).data("fbid");
+		deleteSong(apiKeys, itemId);
 	});
 
 	$($liEmt[1]).click(function(){
@@ -89,15 +100,25 @@ $(document).ready(function(){
 	}); // end addEventListener
 
 	$addSongBtn.click(function(e){
-		addSong();
+		addSong(apiKeys);
 	}); // end addEventListener
+
+	$filterBtn.on("click", () =>{
+		console.log("aa", artist, album );
+		if (album !== "") {
+			filterSongs(apiKeys, "album", album);
+		} else {
+			filterSongs(apiKeys, "artist", artist);
+		}
+	});
 	
 	$artist.on('change', ()=>{
-		filterSongs("artist", $artist.find('option:selected').text());
+		artist = $artist.find('option:selected').val();
+
 	});
 
 	$album.on('change', ()=>{
-		filterSongs("album", $album.find('option:selected').text());
+		album = $album.find('option:selected').val();
 	});
 });
 
@@ -138,57 +159,105 @@ let addSongToDOM = require("./DOM");
 let $songNameEmt = $("#add-name");
 let $artistEmt = $("#add-artist");
 let $albumEmt = $("#add-album");
-let songs = [];
 
-function loadJson(fileName){
+function firebaseCredentials(){
   return new Promise((resolve, reject)=>{
     $.ajax({
-      url:`../${fileName}`
-    }).done(function(data){
-      resolve(data);
-    }).fail(function(xhr, status, error){
+      method: 'GET',
+      url: 'apiKeys.json'
+    }).then((response)=>{
+      resolve(response);
+    }, (error)=>{
       reject(error);
     });
   });
 }
 
-function loadJson2(resultOfFirstAjax){
+function loadJsonFB(apiKeys){
   return new Promise((resolve, reject)=>{
     $.ajax({
-      url:"../songs2.json"
-    }).done(function(data2){
-      songs = resultOfFirstAjax.songs;
-      resolve(data2);
-    }).fail(function(xhr2, status2, error2){
-      reject(error2);
+      method: "GET",
+      url: `${apiKeys.databaseURL}/songs.json`
+    }).then((response)=>{
+      console.log("response", response);
+      let songs = [];
+      switch (Array.isArray(response)){
+        case false:
+          Object.keys(response).forEach(function(key){
+            response[key].id = key;
+            songs.push(response[key]);
+          });
+        break;  
+        case true:
+          response.forEach(function(item, index){
+            item.id = index;
+          });
+          songs = response;
+        break;
+      }
+      resolve(songs);
+    }, (error)=>{
+      reject(error);
     });
   });
 }
 
-function addSong(){
+function loadSongs(apiKeys){
+  loadJsonFB(apiKeys).then(function(dataPass){
+    addSongToDOM(dataPass);
+  });
+}
+
+function postSongInFB(apiKeys, newItem){
+  return new Promise((resolve, reject)=>{
+    $.ajax({
+      method: "POST",
+      url: `${apiKeys.databaseURL}/songs.json`,
+      data:JSON.stringify(newItem),
+      dataType:"json"
+    }).then((response)=>{
+      console.log("response", response);
+      resolve(response);
+    }, (error)=>{
+      reject(error);
+    });
+  });
+}
+
+function deleteSongInFB(apiKeys, itemId){
+  return new Promise((resolve, reject)=>{
+    $.ajax({
+      method: "DELETE",
+      url: `${apiKeys.databaseURL}/songs/${itemId}.json`,
+    }).then((response)=>{
+      console.log("delete", response);
+      resolve(response);
+    }, (error)=>{
+      reject(error);
+    });
+  });
+}
+
+function addSong(apiKeys){
   let newSong = {};
   newSong.name = $songNameEmt.val();
   newSong.artist = $artistEmt.val();
   newSong.album = $albumEmt.val();
-  songs.push(newSong);
-  addSongToDOM(songs);
-}
-
-function loadSongs(fileName){
-  loadJson(fileName).then(function(dataPass){
-    dataPass.songs.forEach(function(song){
-      songs.push(song);
-    });
-    addSongToDOM(songs);
+  postSongInFB(apiKeys, newSong).then(function(response){
+    loadSongs(apiKeys);
   });
 }
 
-function getSongs(){
-  return songs;
+function deleteSong(apiKeys, itemId){
+  deleteSongInFB(apiKeys, itemId).then(function(response){
+    loadSongs(apiKeys);
+  });
 }
 
-module.exports.addSong = addSong;
 module.exports.loadSongs = loadSongs;
-module.exports.getSongs = getSongs;
+module.exports.addSong = addSong;
+module.exports.deleteSong = deleteSong;
+module.exports.loadJsonFB = loadJsonFB;
+module.exports.firebaseCredentials = firebaseCredentials;
 
 },{"./DOM":1}]},{},[3]);

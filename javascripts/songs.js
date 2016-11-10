@@ -5,55 +5,103 @@ let addSongToDOM = require("./DOM");
 let $songNameEmt = $("#add-name");
 let $artistEmt = $("#add-artist");
 let $albumEmt = $("#add-album");
-let songs = [];
 
-function loadJson(fileName){
+function firebaseCredentials(){
   return new Promise((resolve, reject)=>{
     $.ajax({
-      url:`../${fileName}`
-    }).done(function(data){
-      resolve(data);
-    }).fail(function(xhr, status, error){
+      method: 'GET',
+      url: 'apiKeys.json'
+    }).then((response)=>{
+      resolve(response);
+    }, (error)=>{
       reject(error);
     });
   });
 }
 
-function loadJson2(resultOfFirstAjax){
+function loadJsonFB(apiKeys){
   return new Promise((resolve, reject)=>{
     $.ajax({
-      url:"../songs2.json"
-    }).done(function(data2){
-      songs = resultOfFirstAjax.songs;
-      resolve(data2);
-    }).fail(function(xhr2, status2, error2){
-      reject(error2);
+      method: "GET",
+      url: `${apiKeys.databaseURL}/songs.json`
+    }).then((response)=>{
+      console.log("response", response);
+      let songs = [];
+      switch (Array.isArray(response)){
+        case false:
+          Object.keys(response).forEach(function(key){
+            response[key].id = key;
+            songs.push(response[key]);
+          });
+        break;  
+        case true:
+          response.forEach(function(item, index){
+            item.id = index;
+          });
+          songs = response;
+        break;
+      }
+      resolve(songs);
+    }, (error)=>{
+      reject(error);
     });
   });
 }
 
-function addSong(){
+function loadSongs(apiKeys){
+  loadJsonFB(apiKeys).then(function(dataPass){
+    addSongToDOM(dataPass);
+  });
+}
+
+function postSongInFB(apiKeys, newItem){
+  return new Promise((resolve, reject)=>{
+    $.ajax({
+      method: "POST",
+      url: `${apiKeys.databaseURL}/songs.json`,
+      data:JSON.stringify(newItem),
+      dataType:"json"
+    }).then((response)=>{
+      console.log("response", response);
+      resolve(response);
+    }, (error)=>{
+      reject(error);
+    });
+  });
+}
+
+function deleteSongInFB(apiKeys, itemId){
+  return new Promise((resolve, reject)=>{
+    $.ajax({
+      method: "DELETE",
+      url: `${apiKeys.databaseURL}/songs/${itemId}.json`,
+    }).then((response)=>{
+      console.log("delete", response);
+      resolve(response);
+    }, (error)=>{
+      reject(error);
+    });
+  });
+}
+
+function addSong(apiKeys){
   let newSong = {};
   newSong.name = $songNameEmt.val();
   newSong.artist = $artistEmt.val();
   newSong.album = $albumEmt.val();
-  songs.push(newSong);
-  addSongToDOM(songs);
-}
-
-function loadSongs(fileName){
-  loadJson(fileName).then(function(dataPass){
-    dataPass.songs.forEach(function(song){
-      songs.push(song);
-    });
-    addSongToDOM(songs);
+  postSongInFB(apiKeys, newSong).then(function(response){
+    loadSongs(apiKeys);
   });
 }
 
-function getSongs(){
-  return songs;
+function deleteSong(apiKeys, itemId){
+  deleteSongInFB(apiKeys, itemId).then(function(response){
+    loadSongs(apiKeys);
+  });
 }
 
-module.exports.addSong = addSong;
 module.exports.loadSongs = loadSongs;
-module.exports.getSongs = getSongs;
+module.exports.addSong = addSong;
+module.exports.deleteSong = deleteSong;
+module.exports.loadJsonFB = loadJsonFB;
+module.exports.firebaseCredentials = firebaseCredentials;

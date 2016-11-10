@@ -14,11 +14,10 @@ function addSongToDOM(songs) {
 					<li>${Song.artist}</li>
 					<li>${Song.album}</li>
 				</ul>
-				<button id='btnDelete'>Delete</button>
+				<button class='btnDelete' data-fbid="${Song.id}">Delete</button>
 			</section>`
 		);
 	}
-  $($contentElement).append("<button id='btnMore'>More\></button>");
 } // end function addSongToDOM
 
 module.exports = addSongToDOM;
