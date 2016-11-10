@@ -1,9 +1,17 @@
 "use strict";
+
+let firebaseCredentials = require("./songs.js").firebaseCredentials;
 let addSong = require("./songs.js").addSong;
+let deleteSong = require("./songs.js").deleteSong;
 let loadSongs = require("./songs.js").loadSongs;
 let showSongList = require("./showView.js").showSongList;
 let showSongForm = require("./showView.js").showSongForm;
 let filterSongs = require("./filter.js");
+
+let apiKeys = {};
+let uid = "";
+let artist = "";
+let album = "";
 
 $(document).ready(function(){
 
@@ -16,18 +24,22 @@ $(document).ready(function(){
 	let $liEmt = $($navEmt).children("li");
 	let $artist = $("#artist");
 	let $album = $("#album");
+	let $filterBtn = $("#filterBtn");
 
-	// load song from json file
-	loadSongs("songs.json");
+	firebaseCredentials().then(function(keys){
+		console.log("keys", keys);
+		apiKeys = keys;
+		firebase.initializeApp(apiKeys);
+		
+		// load song from firebase
+		loadSongs(apiKeys);
+	});
+
 
 	// load song from json2 file
-	$contentElement.click(function(e){
-		if (e.target.id === "btnMore"){
-			loadSongs("songs2.json");
-		}
-		if (e.target.id === "btnDelete"){
-			$(e.target).parent().remove();
-		}
+	$contentElement.on("click", ".btnDelete", function(e){
+		let itemId = $(this).data("fbid");
+		deleteSong(apiKeys, itemId);
 	});
 
 	$($liEmt[1]).click(function(){
@@ -39,15 +51,25 @@ $(document).ready(function(){
 	}); // end addEventListener
 
 	$addSongBtn.click(function(e){
-		addSong();
+		addSong(apiKeys);
 	}); // end addEventListener
+
+	$filterBtn.on("click", () =>{
+		console.log("aa", artist, album );
+		if (album !== "") {
+			filterSongs(apiKeys, "album", album);
+		} else {
+			filterSongs(apiKeys, "artist", artist);
+		}
+	});
 	
 	$artist.on('change', ()=>{
-		filterSongs("artist", $artist.find('option:selected').text());
+		artist = $artist.find('option:selected').val();
+
 	});
 
 	$album.on('change', ()=>{
-		filterSongs("album", $album.find('option:selected').text());
+		album = $album.find('option:selected').val();
 	});
 });
 
