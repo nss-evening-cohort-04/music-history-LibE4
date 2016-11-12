@@ -1,6 +1,6 @@
 
 "use strict";
-let addSongToDOM = require("./DOM");
+let addSongToDOM = require("./DOM").addSongToDOM;
 
 let $songNameEmt = $("#add-name");
 let $artistEmt = $("#add-artist");
@@ -19,13 +19,13 @@ function firebaseCredentials(){
   });
 }
 
-function loadJsonFB(apiKeys){
+function loadJsonFB(apiKeys, uid){
   return new Promise((resolve, reject)=>{
     $.ajax({
       method: "GET",
-      url: `${apiKeys.databaseURL}/songs.json`
+      url: `${apiKeys.databaseURL}/songs.json?orderBy="uid"&equalTo="${uid}"`
     }).then((response)=>{
-      console.log("response", response);
+      console.log("loadJsonFB response", response);
       let songs = [];
       switch (Array.isArray(response)){
         case false:
@@ -48,8 +48,8 @@ function loadJsonFB(apiKeys){
   });
 }
 
-function loadSongs(apiKeys){
-  loadJsonFB(apiKeys).then(function(dataPass){
+function loadSongs(apiKeys, uid){
+  loadJsonFB(apiKeys, uid).then(function(dataPass){
     addSongToDOM(dataPass);
   });
 }
@@ -62,7 +62,6 @@ function postSongInFB(apiKeys, newItem){
       data:JSON.stringify(newItem),
       dataType:"json"
     }).then((response)=>{
-      console.log("response", response);
       resolve(response);
     }, (error)=>{
       reject(error);
@@ -76,7 +75,6 @@ function deleteSongInFB(apiKeys, itemId){
       method: "DELETE",
       url: `${apiKeys.databaseURL}/songs/${itemId}.json`,
     }).then((response)=>{
-      console.log("delete", response);
       resolve(response);
     }, (error)=>{
       reject(error);
@@ -84,19 +82,20 @@ function deleteSongInFB(apiKeys, itemId){
   });
 }
 
-function addSong(apiKeys){
+function addSong(apiKeys, uid){
   let newSong = {};
   newSong.name = $songNameEmt.val();
   newSong.artist = $artistEmt.val();
   newSong.album = $albumEmt.val();
+  newSong.uid = uid;
   postSongInFB(apiKeys, newSong).then(function(response){
-    loadSongs(apiKeys);
+    loadSongs(apiKeys, uid);
   });
 }
 
-function deleteSong(apiKeys, itemId){
+function deleteSong(apiKeys, uid, itemId){
   deleteSongInFB(apiKeys, itemId).then(function(response){
-    loadSongs(apiKeys);
+    loadSongs(apiKeys, uid);
   });
 }
 

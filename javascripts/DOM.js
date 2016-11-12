@@ -1,5 +1,7 @@
 "use strict";
 
+let getUser = require("./user.js").getUser;
+
 // to display song in DOM
 var $contentElement = $("#content");
 
@@ -20,4 +22,14 @@ function addSongToDOM(songs) {
 	}
 } // end function addSongToDOM
 
-module.exports = addSongToDOM;
+function createLogoutButton(apiKeys, uid){
+	getUser(apiKeys, uid).then(function(userResponse){
+		$("#content").html("");
+		let currentUsername = userResponse.username;
+		let logoutButton = `<button class="btn btn-danger" id="logoutButton">LOGOUT ${currentUsername}</button>`;
+		$("#logout-container").append(logoutButton);
+	});
+}
+
+module.exports.addSongToDOM = addSongToDOM;
+module.exports.createLogoutButton = createLogoutButton;
