@@ -7,6 +7,12 @@ let loadSongs = require("./songs.js").loadSongs;
 let showSongList = require("./showView.js").showSongList;
 let showSongForm = require("./showView.js").showSongForm;
 let filterSongs = require("./filter.js");
+let registerUser = require("./authentic.js").registerUser;
+let loginUser = require("./authentic.js").loginUser;
+let credentialsCurrentUser = require("./authentic.js").credentialsCurrentUser;
+let logoutUser = require("./authentic.js").logoutUser;
+let addUser = require("./user.js").addUser;
+let createLogoutButton = require("./DOM.js").createLogoutButton;
 
 let apiKeys = {};
 let uid = "";
@@ -30,16 +36,14 @@ $(document).ready(function(){
 		console.log("keys", keys);
 		apiKeys = keys;
 		firebase.initializeApp(apiKeys);
-		
-		// load song from firebase
-		loadSongs(apiKeys);
+		// loadSongs(apiKeys, uid); //load song from firebase
 	});
 
 
 	// load song from json2 file
 	$contentElement.on("click", ".btnDelete", function(e){
 		let itemId = $(this).data("fbid");
-		deleteSong(apiKeys, itemId);
+		deleteSong(apiKeys, uid, itemId);
 	});
 
 	$($liEmt[1]).click(function(){
@@ -51,15 +55,14 @@ $(document).ready(function(){
 	}); // end addEventListener
 
 	$addSongBtn.click(function(e){
-		addSong(apiKeys);
+		addSong(apiKeys, uid);
 	}); // end addEventListener
 
 	$filterBtn.on("click", () =>{
-		console.log("aa", artist, album );
 		if (album !== "") {
-			filterSongs(apiKeys, "album", album);
+			filterSongs(apiKeys, uid, "album", album);
 		} else {
-			filterSongs(apiKeys, "artist", artist);
+			filterSongs(apiKeys, uid, "artist", artist);
 		}
 	});
 	
@@ -71,5 +74,59 @@ $(document).ready(function(){
 	$album.on('change', ()=>{
 		album = $album.find('option:selected').val();
 	});
+
+	$("#registerButton").on("click", function(){
+		let email = $("#inputEmail").val();
+		let password = $("#inputPassword").val();
+		let username = $("#inputUsername").val();
+		let user = {
+			"email": email,
+			"password": password
+		};
+		registerUser(user).then(function(registerResponse){
+			let newUser = {
+				"username":username,
+				"uid":registerResponse.uid
+			};
+			return addUser(apiKeys, newUser);
+		}).then(function(addUserResponse){
+			return loginUser(user);
+		}).then(function(loginResponse){
+			uid = loginResponse.uid;
+			createLogoutButton(apiKeys, uid);
+			loadSongs(apiKeys, uid); //load song from firebase
+			$("#login-container").addClass("hide");
+			$("#music-container").removeClass("hide");		
+		});
+	});	
+
+	$("#loginButton").on("click", function(){
+		let email = $("#inputEmail").val();
+		let password = $("#inputPassword").val();
+		let user = {
+			"email": email,
+			"password": password
+		};
+		loginUser(user).then(function(loginResponse){
+			uid = loginResponse.uid;
+			console.log("uid", uid);
+			createLogoutButton(apiKeys, uid);
+			loadSongs(apiKeys, uid); //load song from firebase
+			$("#login-container").addClass("hide");
+			$("#music-container").removeClass("hide");		
+		});
+	});
+
+	$("#logout-container").on("click", "#logoutButton", function(){
+		logoutUser();
+		uid = "";
+		$("#content").html("");
+		$("#logout-container").html("");
+		$("#inputEmail").val("");
+		$("#inputPassword").val("");
+		$("#inputUsername").val("");
+		$("#login-container").removeClass("hide");
+		$("#music-container").addClass("hide");
+	});	
 });
 

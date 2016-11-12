@@ -1,29 +1,41 @@
 {
 	"songs": [
 		{
-		"name":"The Power of Love",
-		"artist":"Celine Dion",
-		"album":"Color of My Love"
+			"name":"The Power of Love",
+			"artist":"Celine Dion",
+			"album":"Color of My Love",
+			"uid":"XZAeYaSI3TX2c3f492ya5Zvcxq53"
 		},
 		{
 			"name":"Misled",
 			"artist":"Celine Dion",
-			 "album":"Color of My Love"
+			"album":"Color of My Love",
+			"uid":"XZAeYaSI3TX2c3f492ya5Zvcxq53"
 		},
 		{
 			"name":"Think Twice",
 			"artist":"Celine Dion",
-			 "album":"Color of My Love"
+			"album":"Color of My Love",
+			"uid":"XZAeYaSI3TX2c3f492ya5Zvcxq53"
 		},
 		{
 			"name":"Only One Road",
 			"artist":"Celine Dion",
-			 "album":"Color of My Love"
+			"album":"Color of My Love",
+			"uid":"XZAeYaSI3TX2c3f492ya5Zvcxq53"
 		},
 		{
 			"name":"From This Moment On",
 			"artist":"Shania Twain",
-			 "album":"Come On Over"
+			"album":"Come On Over",
+			"uid":"XZAeYaSI3TX2c3f492ya5Zvcxq53"
 		}
-	]
+	],
+		"users":{
+			"user1":{
+				"username":"aa",
+				"uid":"XZAeYaSI3TX2c3f492ya5Zvcxq53"
+			}
+	}
+
 }
